@@ -420,7 +420,7 @@
                 <rect width="45" height="45" x="5" y="5" fill="#F00"/>
                 <rect width="45" height="45" x="50" y="5" fill="#0F0"/>
                 <rect width="45" height="45" x="5" y="50" fill="#00F"/>
-                <rect width="45" height="45" x="50" y="50" fill="#FF0"/>
+                <rect width="4G" height="45" x="50" y="50" fill="#FF0"/>
                 <path d="M 30 30 L 70 30 L 70 70 L 30 70 Z" fill="#C0C0C0"/>
                 <path d="M 35 35 L 65 35 L 65 65 L 35 65 Z" fill="#FFF"/>
                 <path d="M 50 38 L 62 62 L 38 62 Z" fill="#000"/>
@@ -822,18 +822,36 @@
         }
 
         // --- Blog Loading Logic ---
-        async function loadBlogPosts() {
+        
+        // 1. Define blog posts here instead of a separate file
+        // This avoids all fetch() errors in previews and local files.
+        const blogPosts = [
+            {
+                "title": "My First Post: Building This Portfolio",
+                "date": "November 14, 2025",
+                "content": [
+                    "<p>If you're reading this, you're inside the very thing I'm writing about. This portfolio was a super fun project. I wanted to learn how to make something that felt interactive, not just a static page.</p>",
+                    "<p>Using 98.css was a blast. It handles all the core styling of the windows, buttons, and that classic grey. The draggable windows were a fun JavaScript challenge!</p>"
+                ]
+            },
+            {
+                "title": "My Second Post: What I'm Learning Next",
+                "date": "November 15, 2025",
+                "content": [
+                    "<p>Now that the portfolio is 'working', I'm thinking about what to add next. Maybe a simple 'Notepad' app? Or making the Start Menu have more sub-folders?</p>",
+                    "<p>I'm also diving into backend development, so maybe I'll find a way to connect this to a real database... though that might ruin the retro 'static file' vibe!</p>"
+                ]
+            }
+        ];
+
+        // 2. Update the function to read from the variable above
+        function loadBlogPosts() {
             const contentArea = document.getElementById('blog-content-area');
             
             try {
-                const response = await fetch('blog.json');
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const posts = await response.json();
-
                 let postsHtml = '';
-                posts.forEach(post => {
+                // 3. Loop through the new 'blogPosts' variable
+                blogPosts.forEach(post => {
                     postsHtml += `
                         <article>
                             <h2>${post.title}</h2>
@@ -855,8 +873,9 @@
                 `;
 
             } catch (error) {
-                console.error('Failed to load blog posts:', error);
-                contentArea.innerHTML += '<p>Error loading blog posts. Please check the console.</p>';
+                // This 'try' block isn't really needed anymore, but it's good practice
+                console.error('Failed to build blog posts:', error);
+                contentArea.innerHTML += '<p>Error building blog posts.</p>';
             }
         }
 

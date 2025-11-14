@@ -14,10 +14,10 @@
     <style>
         /* Set the desktop background and font */
         body {
-            /* Classic Win98 teal as a fallback */
-            background-color: #008080;
+            /* Changed to solid black */
+            background-color: #000000;
             /* The iconic Windows 7 wallpaper */
-            background-image: url('https://i.imgur.com/L13pkmN.jpg');
+            /* background-image: url('https://i.imgur.com/L13pkmN.jpg'); */
             background-size: cover;
             background-position: center;
             font-family: 'VT323', monospace;
@@ -429,10 +429,7 @@
         </button>
         <div class="taskbar-separator"></div>
         <div class="quick-launch">
-            <!-- New Quick launch Folder icon -->
-            <img onmousedown="playClickSound()" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNMTAgMjBINDAgTDUwIDMwIEg5MCBWODAgSDEwIFYyMCIgZmlsbD0iI0ZGRDcwMCIgc3Ryb2tlPSIjOEI0NTEzIiBzdHJva2Utd2lkdGg9IjIiLz48cGF0aCBkPSJNMTAgMjBWMTBINDAgTDUwIDIwIEgxMCIgZmlsbD0iI0ZGRDcwMCIgc3Ryb2tlPSIjOEI0NTEzIiBzdHJva2Utd2lkdGg9IjIiLz48L3N2Zz4=" alt="Kunal" onclick="showWindow('kunal-window', 'Kunal')" style="width: 28px; height: 28px; padding-top: 2px;" />
-            <!-- Quick launch IE icon -->
-             <img onmousedown="playClickSound()" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDEwMCAxMDAiPjxwYXRoIGQ9Ik01MCAwQzIyLjM4NiAwIDAgMjIuMzg2IDAgNTBzMjIuMzg2IDUwIDUwIDUwIDUwLTIyLjM4NiA1MC01MFM3Ny42MTQgMCA1MCAwem0wIDhjMjMuMTk2IDAgNDIgMTguODA0IDQyIDQycy0xOC44MDQgNDItNDIgNDJTOCA3My4xOTYgOCAzNi44MDUgOCAxOCA2LjI0IDEwLjM3NWMtMTYuMTQgMC0yNi4xMiAxMS4yMy0yNi4xMiAyNS40MzggMCA1LjExLjg5IDEwLjIyIDIuNjcgMTQuNTMyIDEuNDUgMy40OSAzLjUyIDYuNSA2LjEzIDguOTEgMy4yMyAyLjk4IDcuMjMgNC45NiAxMS43NSA1Ljc2IDQuMy43NiA5LjEtLjAyIDEyLjgyLTEuODcgMi42LTEuMyA0LjktMy4yIDYuNy01LjUiLjkxLjYtMS4zIDItLjUgLjUtLjcuOC0xLjUgMS4xLTIuMy4yLS42LjQtMS4yLjUtMS45LjEtLjMuMi0uNi4zLS45LjEtLjQuMS0uNy4yLTEuMXYtLjFjLjAzLS4xLjA2LS4yLjA5LS4zLjA0LS4xLjA3LS4zLjEtLjQuMDEtLjA2LjAyLS4xLjAzLS4xLjA2LS4yLjEtLjQuMTYtLjYuMDMtLjEuMDUtLjIuMDgtLjMuMDEtLjAzLjAyLS4wNi4wMy0uMS4wNi0uMi4xLS40LjE2LS42LjAzLS4xLjA1Li4yLjA4LS4zLjAxLS4wMy4wMi0uMDYuMDMtLjEuMDQtLjIuMDgtLjMuMTItLjUuMDEtLjAzLjAyLS4wNi4wMy0uMS4wNC0uMi4wOC0LjMuMTItLjUuMDEtLjAzLjAyLS4wNi4wMy0uMS4wMi0uMS4wNC0uMi4wNi0uMy4wMS0uMDMuMDItLjYwMy0uMS4wMi0uMS4wNC0uMi4wNi0uMy4wMS0uMDMuMDItLjA2LjAzLS4xLjAxLS4wMy4wMi0uMDYuMDMtLjEuMDItLjEuMDQtLjIuMDYtLjMgbC4wMy0uMWMyLS4xLjA0LS4yLjA2LS4zaC4wM2MuMDItLjEuMDQtLjIuMDYtLjNoLjAzYy4wMi0uMS4wNC0uMi4wNi0uM2guMDNjLjAyLS4xLjA0LS4yLjA2LS4zaC4wM2MuMDItLjEuMDMtLjIuMDUtLjNoLjAzYy4wMi0uMS4wMy0uMi4wNS0uM2guMDNjLjAyLS4xLjAzLS4yLjA1i4zaC4wM2MuMDItLjEuMDMtLjIuMDUtLjNoLjAzYy4wMS0uMS4wMy0uMi4wNC0uM2guMDNjLjAxLS4xLjAzLS4yLjA0LS4zaC4wM2MuMDEtLjEuMDMtLjIuMDQtLjNoLjAzYy4wMS0uMS4wMi0uMi4wNC0uM2guMDNjLjAxLS4xLjAyLS4yLjA0LS4zaC4wM2MuMDEtLjEuMDItLjIuMDQtLjNoLjAzYy4xLS4xLS4xLS4yLS4xLS4yIDAtLjMgMC0uMyAwLS40IiBmaWxsPSIjMUU5MEZGIi8+PHBhdGggZD0iTTY5LjUgNDUuMmMtMi44LTEuNy02LjItMi43LTEwLTIuNy03LjQgMC0xMy43IDMuOC0xNy4xIDkuNC0yLjggNC42LTQuNSAxMC4zLTQuNSAxNi40IDAgNi42IDIuMSAxMi44IDUuNyAxNy44IDEuOCAyLjUgNC4xIDQuNyA2LjggNi40IDMuNCAyLjEgNy40IDMuMiAxMS42IDMuMiA4LjcgMCAxNi4zLTMuNyAyMS4yLTkuNiA0LjMtNS4yIDYuNy0xMi4yIDYuNy0xOS44IDAtOC4yLTMuMS0xNS41LTguMy0yMS4xLTIuNC0yLjYtNS4yLTQuOC04LjEtNi44em0tMTkuMSAzNmMtNi44IDAtMTIuMy01LjUtMTIuMy0xMi4zczUuNS0xMi4zIDEyLjMtMTIuMyAxMi4zIDUuNSAxMi4zIDEyLjMyMy01LjUgMTIuMyAxMi4zIDEyLjN6IiBmaWxsPSIjRkZGIi8+PHBhdGggZD0iTTg0LjQgMzQuMmMtMS4zLTUtMy42LTkuNS02LjgtMTMyLTMuMi0zLjctNy4zLTYuNS0xMS45LTguMS00LjktMS4yLTEwLjItMi40LTE1LjYtMi40LTMuNiAwLTcuMS40LTEwLjQgMS4yLTUuMSAxLjItOS43IDMuNC0xMy42IDYuNC0zLjIgMi45LTUuOSA1LjYtNy45IDkuMS0yLjEgMy41LTMuNCA3LjUtMy45IDExLjcuNS0xLjEgMS4xLTIuMiAxLjgtMy4zIDIuMS0zLjYgNC44LTYuNyA4LTkuMiA0LTMuMSA4LjgtNS4zIDE0LTYuNCA0LjgtMSA5LjgtMS4yIDE0LjciLTYgNC45LjYgOS42IDIuMyAxMy42IDUgMy4zIDIuMiA1OS4yIDcuNyA4LjcgMS40IDIuOCAyLjIgNS45IDIuNSA5LjEuMS44LjEgMS42LjIgMi40LjMtMiAuNS0zLjkuNy01Ljl6IiBmaWxsPSIjRkZENzAwIi8+PHB6IiBmaWxsPSIjRkZGNjhGIi8+PC9zdmc+" alt="Internet Explorer" onclick="showWindow('blog-window', 'Kunal\'s Blog')" />
+            <!-- Quick launch icons removed as requested -->
         </div>
 
         <!-- This div will hold the window tabs -->

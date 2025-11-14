@@ -1,0 +1,23 @@
+[
+{
+"title": "My Second Post: What's Next?",
+"date": "November 15, 2025",
+"content": [
+"<p>Now that the portfolio itself is set up, my next goal is to... (etc.)</p>",
+"<p>This is where you'd write the body of your second post. You can use multiple paragraphs.</p>"
+]
+},
+{
+"title": "My First Post: Building This Portfolio",
+"date": "November 14, 2025",
+"content": [
+"<p>If you're reading this, you're inside the very thing I'm writing about! This portfolio was a fun challenge. I wanted to move away from the standard, modern, minimalist designs and do something with a bit more personality.</p>",
+"<p>What's more nostalgic for a developer in my generation than Windows 98? (Okay, so this is the Win7 wallpaper, but the UI is 98!). The whole thing is built with:</p>",
+"<ul class='tree-view' style='font-family: &quot;VT323&quot;, monospace; font-size: 18px; color: initial;'><li>Plain HTML</li><li>Vanilla JavaScript</li><li>The amazing <a href='https://jdan.github.io/98.css/' target='_blank'>98.css</a> library</li></ul>",
+"<h3>The "Apps"</h3>",
+"<p>Right now, I have three "apps":</p>",
+"<ol><li><strong>Kunal (Folder):</strong> This opens up to show my resume.pdf, complete with a fake loading bar.</li><li><strong>Internet (This Blog):</strong> You're here! A place for me to write thoughts.</li><li><strong>Recycle Bin:</strong> Currently just shows that it's empty.</li></ol>",
+"<p>Thanks for stopping by. Click around and don't hesitate to <a href='#'>contact me</a> (link not yet wired up!).</p>"
+]
+}
+]

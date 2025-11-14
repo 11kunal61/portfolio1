@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kunal's Portfolio</title>
+    
+    <!-- Import the 98.css stylesheet -->
+    <link rel="stylesheet" href="https://unpkg.com/98.css" />
+    
+    <!-- Import a pixel-perfect font -->
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Set the desktop background and font */
+        body {
+            /* Classic Win98 teal as a fallback */
+            background-color: #008080;
+            /* The iconic Windows 7 wallpaper */
+            background-image: url('https://i.imgur.com/L13pkmN.jpg');
+            background-size: cover;
+            background-position: center;
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+            overflow: hidden; /* No scrolling the desktop */
+            /* Make room for the taskbar */
+            padding-bottom: 32px;
+        }
+
+        /* Style for desktop icons */
+        .desktop-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90px;
+            text-align: center;
+            cursor: pointer;
+            padding: 10px;
+            color: white;
+            text-shadow: 1px 1px #000;
+            position: absolute;
+            top: 30px;
+            left: 30px;
+        }
+
+        #ie-icon {
+            left: 30px; /* Position next to the Kunal folder */
+            top: 130px;
+        }
+
+        #recycle-bin-icon {
+            left: 30px;
+            top: 230px;
+        }
+
+        .desktop-icon:hover {
+            background-color: rgba(0, 0, 128, 0.5); /* Blue selection */
+            outline: 1px dashed white;
+        }
+
+        .desktop-icon img,
+        .desktop-icon svg {
+            width: 50px;
+            height: 50px;
+        }
+
+        .desktop-icon p {
+            margin-top: 5px;
+            padding: 2px 3px;
+        }
+
+        /* Make windows draggable */
+        .window {
+            position: absolute;
+            min-width: 300px;
+        }
+
+        .title-bar {
+            cursor: move;
+        }
+
+        /* Position the windows on the "desktop" */
+        #kunal-window {
+            top: 50px;
+            left: 100px;
+            width: 400px;
+            display: none; /* Hidden by default */
+        }
+
+        #loader-window {
+            top: 150px;
+            left: 200px;
+            width: 350px;
+            display: none; /* Hidden by default */
+            z-index: 10;
+        }
+
+        #resume-window {
+            top: 70px;
+            left: 120px;
+            width: 70vw; /* 70% of viewport width */
+            height: 80vh; /* 80% of viewport height */
+            display: none; /* Hidden by default */
+            z-index: 5;
+        }
+
+        #blog-window {
+            top: 60px;
+            left: 150px;
+            width: 500px;
+            height: 400px;
+            display: none; /* Hidden by default */
+            z-index: 5;
+        }
+
+        #recycle-bin-window {
+            top: 100px;
+            left: 100px;
+            width: 300px;
+            display: none; /* Hidden by default */
+            z-index: 5;
+        }
+
+
+        /* New class for maximized windows */
+        .window.maximized {
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: calc(100vh - 32px) !important; /* Full height minus taskbar */
+        }
+
+        /* Style for file icons inside a window */
+        .file-icon {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .file-icon:hover,
+        .file-icon:focus {
+            background-color: #000080; /* Classic blue selection */
+            color: white;
+        }
+
+        .file-icon img,
+        .file-icon svg {
+            width: 32px;
+            height: 32px;
+        }
+        
+        /* Make the iframe fill the window body */
+        #resume-window .window-body {
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 24px); /* Full height minus title bar */
+            padding: 0;
+            margin: 0;
+        }
+
+        #pdf-viewer {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Simple progress bar animation */
+        #loader-progress {
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        /* --- Taskbar Styles --- */
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 32px;
+            background-color: #c0c0c0; /* Classic 98.css grey */
+            border-top: 2px solid #ffffff;
+            display: flex;
+            align-items: center;
+            padding: 0 4px;
+            z-index: 100; /* Always on top */
+        }
+
+        .start-button {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: bold;
+            font-size: 18px; /* Match body font */
+            padding-left: 6px;
+            padding-right: 6px;
+        }
+
+        .start-button svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .taskbar-separator {
+            height: 100%;
+            width: 2px;
+            border-left: 1px solid #808080;
+            border-right: 1px solid #ffffff;
+            margin: 0 4px;
+        }
+
+        /* New div to hold window tabs */
+        #taskbar-windows {
+            display: flex;
+            height: 100%;
+            align-items: center;
+            gap: 2px;
+            max-width: calc(100% - 150px); /* Don't overlap clock/start */
+            overflow: hidden;
+        }
+
+        /* New style for the tabs on the taskbar */
+        .taskbar-tab {
+            font-family: 'VT323', monospace;
+            font-size: 16px;
+            height: 28px;
+            min-width: 100px;
+            max-width: 150px;
+            text-align: left;
+            padding-left: 8px;
+            padding-right: 8px;
+            /* Truncate text if too long */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        /* 'sunken-panel' will be our "active" state */
+        .taskbar-tab.active {
+            padding-top: 6px; /* 98.css trick for pressed buttons */
+            padding-left: 10px;
+            font-weight: bold;
+        }
+
+        .quick-launch img {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .clock {
+            margin-left: auto; /* Pushes clock to the right */
+            padding: 2px 8px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            font-size: 16px; /* Clock font is usually a bit smaller */
+            min-width: 80px;
+            justify-content: center;
+        }
+
+        /* --- Start Menu Styles --- */
+        #start-menu {
+            display: none; /* Hidden by default */
+            position: fixed;
+            bottom: 32px; /* Just above the taskbar */
+            left: 0;
+            width: 200px;
+            z-index: 101; /* Above taskbar, below active window */
+            background-color: #c0c0c0;
+            padding: 2px;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+        }
+    </style>
+</head>
+<body onmousedown="playClickSound()">
+
+    <!-- 1. Desktop Icons -->
+    <div class="desktop-icon" id="kunal-icon" onmousedown="playClickSound()" onclick="showWindow('kunal-window', 'Kunal')">
+        <!-- Simple SVG for a folder -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="50" height="50">
+            <path d="M10 20 H40 L50 30 H90 V80 H10 V20" fill="#FFD700" stroke="#8B4513" stroke-width="2"/>
+            <path d="M10 20 V10 H40 L50 20 H10" fill="#FFD700" stroke="#8B4513" stroke-width="2"/>
+        </svg>
+        <p>Kunal</p>
+    </div>
+
+    <div class="desktop-icon" id="ie-icon" onmousedown="playClickSound()" onclick="showWindow('blog-window', 'Kunal\'s Blog')">
+        <!-- SVG for Internet Explorer logo -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 100 100">
+            <path d="M50 0C22.386 0 0 22.386 0 50s22.386 50 50 50 50-22.386 50-50S77.614 0 50 0zm0 8c23.196 0 42 18.804 42 42s-18.804 42-42 42S8 73.196 8 50 26.804 8 50 8zm-6.24 10.375c-16.14 0-26.12 11.23-26.12 25.438 0 5.11.89 10.22 2.67 14.532 1.45 3.49 3.52 6.5 6.13 8.91 3.23 2.98 7.23 4.96 11.75 5.76 4.3.76 9.1-.02 12.82-1.87 2.6-1.3 4.9-3.2 6.7-5.5.9-.9 1.7-1.9 2.4-3 .5-.6.9-1.3 1.3-2 .5-.7.8-1.5 1.1-2.3.2-.6.4-1.2.5-1.9.1-.3.2-.6.3-.9.1-.4.1-.7.2-1.1v-.1c.03-.1.06-.2.09-.3.04-.1.07-.3.1-.4.01-.06.02-.1.03-.1.06-.2.1-.4.16-.6.03-.1.05-.2.08-.3.01-.03.02-.06.03-.1.06-.2.1-.4.16-.6.03-.1.05-.2.08-.3.01-.03.02-.06.03-.1.04-.2.08-.3.12-.5.01-.03.02-.06.03-.1.04-.2.08-.3.12-.5.01-.03.02-.06.03-.1.02-.1.04-.2.06-.3.01-.03.02-.06.03-.1.02-.1.04-.2.06-.3.01-.03.02-.06.03-.1.01-.03.02-.06.03-.1.02-.1.04-.2.06-.3l.03-.1c.02-.1.04-.2.06-.3h.03c.02-.1.04-.2.06-.3h.03c.02-.1.04-.2.06-.3h.03c.02-.1.04-.2.06-.3h.03c.02-.1.03-.2.05-.3h.03c.02-.1.03-.2.05-.3h.03c.02-.1.03-.2.05-.3h.03c.02-.1.03-.2.05-.3h.03c.01-.1.03-.2.04-.3h.03c.01-.1.03-.2.04-.3h.03c.01-.1.03-.2.04-.3h.03c.01-.1.02-.2.04-.3h.03c.01-.1.02-.2.04-.3h.03c.01-.1.02-.2.04-.3h.03c.f 0" fill="#1E90FF"/>
+            <path d="M69.5 45.2c-2.8-1.7-6.2-2.7-10-2.7-7.4 0-13.7 3.8-17.1 9.4-2.8 4.6-4.5 10.3-4.5 16.4 0 6.6 2.1 12.8 5.7 17.8 1.8 2.5 4.1 4.7 6.8 6.4 3.4 2.1 7.4 3.2 11.6 3.2 8.7 0 16.3-3.7 21.2-9.6 4.3-5.2 6.7-12.2 6.7-19.8 0-8.2-3.1-15.5-8.3-21.1-2.4-2.6-5.2-4.8-8.1-6.4zm-19.1 36c-6.8 0-12.3-5.5-12.3-12.3s5.5-12.3 12.3-12.3 12.3 5.5 12.3 12.3-5.5 12.3-12.3 12.3z" fill="#FFF"/>
+            <path d="M84.4 34.2c-1.3-5-3.6-9.5-6.8-13.2-3.2-3.7-7.3-6.5-11.9-8.1-4.9-1.7-10.2-2.4-15.6-2.4-3.6 0-7.1.4-10.4 1.2-5.1 1.2-9.7 3.4-13.6 6.4-3.2 2.5-5.9 5.6-7.9 9.1-2.1 3.5-3.4 7.5-3.9 11.7.5-1.1 1.1-2.2 1.8-3.3 2.1-3.6 4.8-6.7 8-9.2 4-3.1 8.8-5.3 14-6.4 4.8-1 9.8-1.2 14.7-.6 4.9.6 9.6 2.3 13.6 5 3.3 2.2 5.9 5.2 7.7 8.7 1.4 2.8 2.2 5.9 2.5 9.1.1.8.1 1.6.2 2.4.3-2 .5-3.9.7-5.9z" fill="#FFD700"/>
+            <path d="M84.4 34.2c.2-2 .4-3.9.7-5.9.1.8.1 1.6.2 2.4z" fill="#FFF68F"/>
+        </svg>
+        <p>Internet</p>
+    </div>
+
+    <div class="desktop-icon" id="recycle-bin-icon" onmousedown="playClickSound()" onclick="showWindow('recycle-bin-window', 'Recycle Bin')">
+        <!-- SVG for Recycle Bin (empty) -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 64 64">
+            <path fill="#C0C0C0" stroke="#222" stroke-width="2" d="M18 16 L46 16 L46 54 L18 54 Z"/>
+            <path fill="none" stroke="#222" stroke-width="2" d="M24 10 L40 10 M14 16 L50 16 M22 22 L22 48 M32 22 L32 48 M42 22 L42 48"/>
+        </svg>
+        <p>Recycle Bin</p>
+    </div>
+
+
+    <!-- 2. "Kunal" Folder Window (Hidden) -->
+    <div class="window" id="kunal-window">
+        <div class="title-bar">
+            <div class="title-bar-text">Kunal</div>
+            <div class="title-bar-controls">
+                <button aria-label="Minimize" onmousedown="playClickSound()" onclick="minimizeWindow('kunal-window')"></button>
+                <button aria-label="Maximize" onmousedown="playClickSound()" onclick="toggleMaximize('kunal-window')"></button>
+                <button aria-label="Close" onmousedown="playClickSound()" onclick="hideWindow('kunal-window')"></button>
+            </div>
+        </div>
+        <div class="window-body">
+            <p>Welcome to my folder. Click the file below to see my resume.</p>
+            <div class="file-icon" onmousedown="playClickSound()" onclick="showResume()">
+                <!-- Simple SVG for a file -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32">
+                    <path d="M20 10 H80 V90 H20 V10 Z" fill="white" stroke="black" stroke-width="2"/>
+                    <path d="M60 10 V30 H80 Z" fill="lightgray" stroke="black" stroke-width="2"/>
+                    <path d="M60 10 L80 30" fill="none" stroke="black" stroke-width="2"/>
+                    <path d="M30 40 H70" stroke="black" stroke-width="3"/>
+                    <path d="M30 50 H70" stroke="black" stroke-width="3"/>
+                    <path d="M30 60 H70" stroke="black" stroke-width="3"/>
+                    <path d="M30 70 H50" stroke="black" stroke-width="3"/>
+                </svg>
+                <p>resume.pdf</p>
+            </div>
+        </div>
+        <div class="status-bar">
+            <p class="status-bar-field">1 object(s)</p>
+        </div>
+    </div>
+
+    <!-- 3. Loader Window (Hidden) -->
+    <div class="window" id="loader-window">
+        <div class="title-bar">
+            <div class="title-bar-text">Loading...</div>
+        </div>
+        <div class="window-body">
+            <p>Loading resume.pdf...</p>
+            <div class="progress-bar-container">
+                <div id="loader-progress" class="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Resume PDF Window (Hidden) -->
+    <div class="window" id="resume-window">
+        <div class="title-bar">
+            <div class="title-bar-text">resume.pdf - PDF Viewer</div>
+            <div class="title-bar-controls">
+                <button aria-label="Minimize" onmousedown="playClickSound()" onclick="minimizeWindow('resume-window')"></button>
+                <button aria-label="Maximize" onmousedown="playClickSound()" onclick="toggleMaximize('resume-window')"></button>
+                <button aria-label="Close" onmousedown="playClickSound()" onclick="hideWindow('resume-window'); clearPdf()"> </button>
+            </div>
+        </div>
+        <div class="window-body">
+            <!-- The iframe where the PDF will be loaded -->
+            <iframe id="pdf-viewer" src=""></iframe>
+        </div>
+    </div>
+
+    <!-- 5. New Blog/IE Window (Hidden) -->
+    <div class="window" id="blog-window">
+        <div class="title-bar">
+            <div class="title-bar-text">Kunal's Blog - Internet Explorer</div>
+            <div class="title-bar-controls">
+                <button aria-label="Minimize" onmousedown="playClickSound()" onclick="minimizeWindow('blog-window')"></button>
+                <button aria-label="Maximize" onmousedown="playClickSound()" onclick="toggleMaximize('blog-window')"></button>
+                <button aria-label="Close" onmousedown="playClickSound()" onclick="hideWindow('blog-window')"></button>
+            </div>
+        </div>
+        <div class="window-body" style="background: white; color: black; font-family: 'Times New Roman', serif; font-size: 16px;">
+            <!-- A more 'document' like style inside -->
+            <div id="blog-content-area" style="padding: 10px; height: 100%; overflow-y: auto;">
+                <!-- Blog posts will be loaded here by JavaScript -->
+                <h1>Welcome to my Dev Blog!</h1>
+                <p>This is where I'll document my journey, share projects, and post tutorials. It's all part of the portfolio!</p>
+                
+                <!-- The content from blog.json will be injected below this line -->
+
+            </div>
+        </div>
+        <div class="status-bar">
+            <p class="status-bar-field">Done</p>
+        </div>
+    </div>
+
+    <!-- 6. New Recycle Bin Window (Hidden) -->
+    <div class="window" id="recycle-bin-window">
+        <div class="title-bar">
+            <div class="title-bar-text">Recycle Bin</div>
+            <div class="title-bar-controls">
+                <button aria-label="Minimize" onmousedown="playClickSound()" onclick="minimizeWindow('recycle-bin-window')"></button>
+                <button aria-label="Maximize" onmousedown="playClickSound()" onclick="toggleMaximize('recycle-bin-window')"></button>
+                <button aria-label="Close" onmousedown="playClickSound()" onclick="hideWindow('recycle-bin-window')"></button>
+            </div>
+        </div>
+        <div class="window-body">
+            <p>Recycle Bin is empty.</p>
+        </div>
+        <div class="status-bar">
+            <p class="status-bar-field">0 object(s)</p>
+        </div>
+    </div>
+
+    <!-- 7. New Taskbar -->
+    <div class="taskbar">
+        <button class="start-button" id="start-button" onmousedown="playClickSound()">
+            <!-- Win98 Logo SVG -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 100 100">
+                <rect width="45" height="45" x="5" y="5" fill="#F00"/>
+                <rect width="45" height="45" x="50" y="5" fill="#0F0"/>
+                <rect width="45" height="45" x="5" y="50" fill="#00F"/>
+                <rect width="45" height="45" x="50" y="50" fill="#FF0"/>
+                <path d="M 30 30 L 70 30 L 70 70 L 30 70 Z" fill="#C0C0C0"/>
+                <path d="M 35 35 L 65 35 L 65 65 L 35 65 Z" fill="#FFF"/>
+                <path d="M 50 38 L 62 62 L 38 62 Z" fill="#000"/>
+            </svg>
+            <span>Start</span>
+        </button>
+        <div class="taskbar-separator"></div>
+        <div class="quick-launch">
+            <!-- New Quick launch Folder icon -->
+            <img onmousedown="playClickSound()" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNMTAgMjBINDAgTDUwIDMwIEg5MCBWODAgSDEwIFYyMCIgZmlsbD0iI0ZGRDcwMCIgc3Ryb2tlPSIjOEI0NTEzIiBzdHJva2Utd2lkdGg9IjIiLz48cGF0aCBkPSJNMTAgMjBWMTBINDAgTDUwIDIwIEgxMCIgZmlsbD0iI0ZGRDcwMCIgc3Ryb2tlPSIjOEI0NTEzIiBzdHJva2Utd2lkdGg9IjIiLz48L3N2Zz4=" alt="Kunal" onclick="showWindow('kunal-window', 'Kunal')" style="width: 28px; height: 28px; padding-top: 2px;" />
+            <!-- Quick launch IE icon -->
+             <img onmousedown="playClickSound()" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDEwMCAxMDAiPjxwYXRoIGQ9Ik01MCAwQzIyLjM4NiAwIDAgMjIuMzg2IDAgNTBzMjIuMzg2IDUwIDUwIDUwIDUwLTIyLjM4NiA1MC01MFM3Ny42MTQgMCA1MCAwem0wIDhjMjMuMTk2IDAgNDIgMTguODA0IDQyIDQycy0xOC44MDQgNDItNDIgNDJTOCA3My4xOTYgOCAzNi44MDUgOCAxOCA2LjI0IDEwLjM3NWMtMTYuMTQgMC0yNi4xMiAxMS4yMy0yNi4xMiAyNS40MzggMCA1LjExLjg5IDEwLjIyIDIuNjcgMTQuNTMyIDEuNDUgMy40OSAzLjUyIDYuNSA2LjEzIDguOTEgMy4yMyAyLjk4IDcuMjMgNC45NiAxMS43NSA1Ljc2IDQuMy43NiA5LjEtLjAyIDEyLjgyLTEuODcgMi42LTEuMyA0LjktMy4yIDYuNy01LjUiLjkxLjYtMS4zIDItLjUgLjUtLjcuOC0xLjUgMS4xLTIuMy4yLS42LjQtMS4yLjUtMS45LjEtLjMuMi0uNi4zLS45LjEtLjQuMS0uNy4yLTEuMXYtLjFjLjAzLS4xLjA2LS4yLjA5LS4zLjA0LS4xLjA3LS4zLjEtLjQuMDEtLjA2LjAyLS4xLjAzLS4xLjA2LS4yLjEtLjQuMTYtLjYuMDMtLjEuMDUtLjIuMDgtLjMuMDEtLjAzLjAyLS4wNi4wMy0uMS4wNi0uMi4xLS40LjE2LS42LjAzLS4xLjA1Li4yLjA4LS4zLjAxLS4wMy4wMi0uMDYuMDMtLjEuMDQtLjIuMDgtLjMuMTItLjUuMDEtLjAzLjAyLS4wNi4wMy0uMS4wNC0uMi4wOC0LjMuMTItLjUuMDEtLjAzLjAyLS4wNi4wMy0uMS4wMi0uMS4wNC0uMi4wNi0uMy4wMS0uMDMuMDItLjYwMy0uMS4wMi0uMS4wNC0uMi4wNi0uMy4wMS0uMDMuMDItLjA2LjAzLS4xLjAxLS4wMy4wMi0uMDYuMDMtLjEuMDItLjEuMDQtLjIuMDYtLjMgbC4wMy0uMWMyLS4xLjA0LS4yLjA2LS4zaC4wM2MuMDItLjEuMDQtLjIuMDYtLjNoLjAzYy4wMi0uMS4wNC0uMi4wNi0uM2guMDNjLjAyLS4xLjA0LS4yLjA2LS4zaC4wM2MuMDItLjEuMDMtLjIuMDUtLjNoLjAzYy4wMi0uMS4wMy0uMi4wNS0uM2guMDNjLjAyLS4xLjAzLS4yLjA1i4zaC4wM2MuMDItLjEuMDMtLjIuMDUtLjNoLjAzYy4wMS0uMS4wMy0uMi4wNC0uM2guMDNjLjAxLS4xLjAzLS4yLjA0LS4zaC4wM2MuMDEtLjEuMDMtLjIuMDQtLjNoLjAzYy4wMS0uMS4wMi0uMi4wNC0uM2guMDNjLjAxLS4xLjAyLS4yLjA0LS4zaC4wM2MuMDEtLjEuMDItLjIuMDQtLjNoLjAzYy4xLS4xLS4xLS4yLS4xLS4yIDAtLjMgMC0uMyAwLS40IiBmaWxsPSIjMUU5MEZGIi8+PHBhdGggZD0iTTY5LjUgNDUuMmMtMi44LTEuNy02LjItMi43LTEwLTIuNy03LjQgMC0xMy43IDMuOC0xNy4xIDkuNC0yLjggNC42LTQuNSAxMC4zLTQuNSAxNi40IDAgNi42IDIuMSAxMi44IDUuNyAxNy44IDEuOCAyLjUgNC4xIDQuNyA2LjggNi40IDMuNCAyLjEgNy40IDMuMiAxMS42IDMuMiA4LjcgMCAxNi4zLTMuNyAyMS4yLTkuNiA0LjMtNS4yIDYuNy0xMi4yIDYuNy0xOS44IDAtOC4yLTMuMS0xNS41LTguMy0yMS4xLTIuNC0yLjYtNS4yLTQuOC04LjEtNi44em0tMTkuMSAzNmMtNi44IDAtMTIuMy01LjUtMTIuMy0xMi4zczUuNS0xMi4zIDEyLjMtMTIuMyAxMi4zIDUuNSAxMi4zIDEyLjMyMy01LjUgMTIuMyAxMi4zIDEyLjN6IiBmaWxsPSIjRkZGIi8+PHBhdGggZD0iTTg0LjQgMzQuMmMtMS4zLTUtMy42LTkuNS02LjgtMTMyLTMuMi0zLjctNy4zLTYuNS0xMS45LTguMS00LjktMS4yLTEwLjItMi40LTE1LjYtMi40LTMuNiAwLTcuMS40LTEwLjQgMS4yLTUuMSAxLjItOS43IDMuNC0xMy42IDYuNC0zLjIgMi45LTUuOSA1LjYtNy45IDkuMS0yLjEgMy41LTMuNCA3LjUtMy45IDExLjcuNS0xLjEgMS4xLTIuMiAxLjgtMy4zIDIuMS0zLjYgNC44LTYuNyA4LTkuMiA0LTMuMSA4LjgtNS4zIDE0LTYuNCA0LjgtMSA5LjgtMS4yIDE0LjciLTYgNC45LjYgOS42IDIuMyAxMy42IDUgMy4zIDIuMiA1OS4yIDcuNyA4LjcgMS40IDIuOCAyLjIgNS45IDIuNSA5LjEuMS44LjEgMS42LjIgMi40LjMtMiAuNS0zLjkuNy01Ljl6IiBmaWxsPSIjRkZENzAwIi8+PHB6IiBmaWxsPSIjRkZGNjhGIi8+PC9zdmc+" alt="Internet Explorer" onclick="showWindow('blog-window', 'Kunal\'s Blog')" />
+        </div>
+
+        <!-- This div will hold the window tabs -->
+        <div id="taskbar-windows"></div>
+
+        <div class="clock sunken-panel" id="clock">
+            3:20 PM
+        </div>
+    </div>
+
+    <!-- 8. New Start Menu (Hidden) -->
+    <div id="start-menu" class="sunken-panel">
+        <ul class="menu-items">
+            <li onmousedown="playClickSound()" onclick="showWindow('kunal-window', 'Kunal'); closeStartMenu();">
+                <!-- Inline SVG for folder -->
+                <svg viewBox="0 0 100 100" width="20" height="20" style="margin-right: 5px;">
+                    <path d="M10 20 H40 L50 30 H90 V80 H10 V20" fill="#FFD700" stroke="#8B4513" stroke-width="3"/>
+                    <path d="M10 20 V10 H40 L50 20 H10" fill="#FFD700" stroke="#8B4513" stroke-width="3"/>
+                </svg>
+                Kunal
+            </li>
+            <li onmousedown="playClickSound()" onclick="showWindow('blog-window', 'Kunal\'s Blog'); closeStartMenu();">
+                <!-- Inline SVG for IE -->
+                <svg viewBox="0 0 100 100" width="20" height="20" style="margin-right: 5px;">
+                     <path d="M50 0C22.386 0 0 22.386 0 50s22.386 50 50 50 50-22.386 50-50S77.614 0 50 0zm0 8c23.196 0 42 18.804 42 42s-18.804 42-42 42S8 73.196 8 50 26.804 8 50 8z" fill="#1E90FF"/>
+                     <path d="M69.5 45.2c-2.8-1.7-6.2-2.7-10-2.7-7.4 0-13.7 3.8-17.1 9.4-2.8 4.6-4.5 10.3-4.5 16.4 0 6.6 2.1 12.8 5.7 17.8 1.8 2.5 4.1 4.7 6.8 6.4 3.4 2.1 7.4 3.2 11.6 3.2 8.7 0 16.3-3.7 21.2-9.6 4.3-5.2 6.7-12.2 6.7-19.8 0-8.2-3.1-15.5-8.3-21.1-2.4-2.6-5.2-4.8-8.1-6.4zm-19.1 36c-6.8 0-12.3-5.5-12.3-12.3s5.5-12.3 12.3-12.3 12.3 5.5 12.3 12.3-5.5 12.3-12.3 12.3z" fill="#FFF"/>
+                     <path d="M84.4 34.2c-1.3-5-3.6-9.5-6.8-13.2-3.2-3.7-7.3-6.5-11.9-8.1-4.9-1.7-10.2-2.4-15.6-2.4-3.6 0-7.1.4-10.4 1.2-5.1 1.2-9.7 3.4-13.6 6.4-3.2 2.5-5.9 5.6-7.9 9.1-2.1 3.5-3.4 7.5-3.9 11.7.5-1.1 1.1-2.2 1.8-3.3 2.1-3.6 4.8-6.7 8-9.2 4-3.1 8.8-5.3 14-6.4 4.8-1 9.8-1.2 14.7-.6 4.9.6 9.6 2.3 13.6 5 3.3 2.2 5.9 5.2 7.7 8.7 1.4 2.8 2.2 5.9 2.5 9.1.1.8.1 1.6.2 2.4.3-2 .5-3.9.7-5.9z" fill="#FFD700"/>
+                </svg>
+                Internet
+            </li>
+        </ul>
+    </div>
+
+    <!-- 9. Audio Elements -->
+    <!-- Short click sound (Data URI) -->
+    <audio id="click-sound" src="data:audio/wav;base64,UklGRlIAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAA"></audio>
+    <!-- Short startup beep (Data URI) -->
+    <audio id="startup-sound" src="data:audio/wav;base64,UklGRlQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YSgAAADAf/8C/wEAAQAAAAMAAACs/Mgv/3EAMv+vAIA//wMCAEIAAg=="></audio>
+
+
+    <script>
+        // --- Global State ---
+        let highestZ = 10;
+        const windowStates = {
+            'kunal-window': { 
+                minimized: false, 
+                maximized: false, 
+                lastPos: { top: '50px', left: '100px', width: '400px', height: 'auto' } 
+            },
+            'resume-window': { 
+                minimized: false, 
+                maximized: false, 
+                lastPos: { top: '70px', left: '120px', width: '70vw', height: '80vh' } 
+            },
+            'blog-window': { 
+                minimized: false, 
+                maximized: false, 
+                lastPos: { top: '60px', left: '150px', width: '500px', height: '400px' } 
+            },
+            'recycle-bin-window': {
+                minimized: false, 
+                maximized: false, 
+                lastPos: { top: '100px', left: '100px', width: '300px', height: 'auto' } 
+            }
+        };
+
+        // --- Sound Functions ---
+        function playClickSound() {
+            const clickSound = document.getElementById('click-sound');
+            clickSound.currentTime = 0; // Rewind to start
+            clickSound.play();
+        }
+
+        function playStartupSound() {
+            document.getElementById('startup-sound').play();
+        }
+
+        // --- Window Management ---
+
+        function showWindow(id, title) {
+            const el = document.getElementById(id);
+            if (!el) return;
+
+            // Restore from minimized if it was
+            if (windowStates[id].minimized) {
+                el.style.display = 'block';
+                windowStates[id].minimized = false;
+            } else {
+                el.style.display = 'block';
+            }
+            
+            bringToFront(el);
+            createTaskbarTab(id, title);
+            updateTaskbarTabs(id);
+        }
+
+        function hideWindow(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.style.display = 'none';
+                windowStates[id].minimized = false; // Reset state on close
+                windowStates[id].maximized = false;
+                el.classList.remove('maximized');
+                removeTaskbarTab(id);
+            }
+        }
+
+        function minimizeWindow(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+
+            // Store position only if not maximized
+            if (!windowStates[id].maximized) {
+                const rect = el.getBoundingClientRect();
+                windowStates[id].lastPos = {
+                    top: el.style.top,
+                    left: el.style.left,
+                    width: rect.width + 'px',
+                    height: rect.height + 'px'
+                };
+            }
+            
+            el.style.display = 'none';
+            windowStates[id].minimized = true;
+            updateTaskbarTabs(null); // Deactivate all tabs
+        }
+
+        function toggleMaximize(id) {
+            const el = document.getElementById(id);
+            const state = windowStates[id];
+            const maxButton = el.querySelector('[aria-label="Maximize"], [aria-label="Restore"]');
+
+            if (state.maximized) {
+                // Restore
+                el.classList.remove('maximized');
+                el.style.top = state.lastPos.top;
+                el.style.left = state.lastPos.left;
+                el.style.width = state.lastPos.width;
+                el.style.height = state.lastPos.height;
+                
+                state.maximized = false;
+                if(maxButton) maxButton.setAttribute('aria-label', 'Maximize');
+            } else {
+                // Maximize
+                // Store current pos before maximizing
+                const rect = el.getBoundingClientRect();
+                state.lastPos = {
+                    top: el.style.top,
+                    left: el.style.left,
+                    width: rect.width + 'px',
+                    height: rect.height + 'px'
+                };
+
+                el.classList.add('maximized');
+                // Clear inline styles so CSS class takes over
+                el.style.top = '';
+                el.style.left = '';
+                el.style.width = '';
+                el.style.height = '';
+
+                state.maximized = true;
+                if(maxButton) maxButton.setAttribute('aria-label', 'Restore');
+            }
+            bringToFront(el);
+        }
+
+        function clearPdf() {
+            // Unload the PDF when closing the window to save memory
+            document.getElementById('pdf-viewer').src = 'about:blank';
+        }
+
+        // --- Resume Loading Logic ---
+
+        function showResume() {
+            // *** IMPORTANT: Replace this with the public URL to your resume.pdf! ***
+            // For Vercel, upload your PDF to the /public folder
+            // and then the URL will just be '/resume.pdf'.
+            // const resumePdfUrl = '/resume.pdf'; 
+            
+            // If you're testing locally, you can use a sample PDF:
+            // const resumePdfUrl = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
+
+            // FOR LOCAL TESTING (Option 1):
+            // const resumePdfUrl = 'public/resume.pdf'; 
+            
+            // FOR VERCEL (and local server testing):
+            const resumePdfUrl = '/resume.pdf';
+
+
+            hideWindow('kunal-window');
+            showWindow('loader-window');
+
+            let progress = 0;
+            const progressBar = document.getElementById('loader-progress');
+            progressBar.style.width = '0%';
+
+            const interval = setInterval(() => {
+                progress += Math.random() * 10; // Simulate variable load speed
+                if (progress > 100) {
+                    progress = 100;
+                }
+                progressBar.style.width = progress + '%';
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        hideWindow('loader-window');
+                        // Load the PDF into the iframe
+                        document.getElementById('pdf-viewer').src = resumePdfUrl;
+                        showWindow('resume-window', 'resume.pdf'); // Pass title
+                        progressBar.style.width = '0%'; // Reset for next time
+                    }, 300); // Short delay after loading
+                }
+            }, 100); // Update progress every 100ms
+        }
+
+        // --- Draggable Window Logic ---
+
+        let activeWindow = null;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        function bringToFront(windowEl) {
+            if (!windowEl) return;
+            highestZ++;
+            windowEl.style.zIndex = highestZ;
+            updateTaskbarTabs(windowEl.id);
+        }
+
+        function onMouseDown(e) {
+            // Only drag from the title bar
+            const titleBar = e.target.closest('.title-bar');
+            if (!titleBar) return;
+            
+            // Play sound on title bar click
+            playClickSound();
+
+            activeWindow = titleBar.closest('.window');
+            if (!activeWindow) return;
+
+            // Don't drag maximized windows
+            if (windowStates[activeWindow.id].maximized) {
+                activeWindow = null;
+                return;
+            }
+            
+            bringToFront(activeWindow);
+
+            // Calculate offset from window's top-left corner
+            const rect = activeWindow.getBoundingClientRect();
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+
+            // Attach move and up listeners to the whole document
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+            
+            // Prevent text selection while dragging
+            e.preventDefault();
+        }
+
+        function onMouseMove(e) {
+            if (!activeWindow) return;
+
+            // Calculate new position
+            let newX = e.clientX - offsetX;
+            let newY = e.clientY - offsetY;
+
+            // Constrain to viewport
+            newX = Math.max(0, Math.min(newX, window.innerWidth - activeWindow.offsetWidth));
+            newY = Math.max(0, Math.min(newY, window.innerHeight - activeWindow.offsetHeight));
+
+            activeWindow.style.left = newX + 'px';
+            activeWindow.style.top = newY + 'px';
+        }
+
+        function onMouseUp() {
+            // Stop dragging
+            activeWindow = null;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+
+        // Attach mousedown listener to the document to catch all window drags
+        document.addEventListener('mousedown', onMouseDown);
+
+        // Also make windows come to front on any click inside them
+        document.addEventListener('click', (e) => {
+            const windowEl = e.target.closest('.window');
+            if (windowEl) {
+                bringToFront(windowEl);
+            }
+        });
+
+        // --- Taskbar Logic ---
+        function createTaskbarTab(id, title) {
+            const container = document.getElementById('taskbar-windows');
+            const tabId = `tab-${id}`;
+            if (document.getElementById(tabId)) {
+                return; // Tab already exists
+            }
+
+            const tab = document.createElement('button');
+            tab.className = 'taskbar-tab';
+            tab.id = tabId;
+            tab.textContent = title;
+            tab.onmousedown = playClickSound; // Add sound
+            tab.onclick = () => onTaskbarTabClick(id);
+            
+            container.appendChild(tab);
+        }
+
+        function removeTaskbarTab(id) {
+            const tab = document.getElementById(`tab-${id}`);
+            if (tab) {
+                tab.remove();
+            }
+        }
+
+        function onTaskbarTabClick(id) {
+            const el = document.getElementById(id);
+            const state = windowStates[id];
+            
+            if (state.minimized) {
+                // Restore
+                el.style.display = 'block';
+                el.style.top = state.lastPos.top;
+                el.style.left = state.lastPos.left;
+                el.style.width = state.lastPos.width;
+                el.style.height = state.lastPos.height;
+                state.minimized = false;
+                bringToFront(el);
+            } else {
+                // Window is open, check if it's active
+                const activeTab = document.querySelector('.taskbar-tab.active');
+                if (activeTab && activeTab.id === `tab-${id}`) {
+                    // It's already active, so minimize it
+                    minimizeWindow(id);
+                } else {
+                    // It's not active, so bring it to front
+                    bringToFront(el);
+                }
+            }
+        }
+
+        function updateTaskbarTabs(activeId) {
+            const tabs = document.querySelectorAll('.taskbar-tab');
+            tabs.forEach(tab => {
+                if (tab.id === `tab-${activeId}`) {
+                    tab.classList.add('active', 'sunken-panel');
+                } else {
+                    tab.classList.remove('active', 'sunken-panel');
+                }
+            });
+        }
+
+        // --- Start Menu Logic ---
+        const startButton = document.getElementById('start-button');
+        const startMenu = document.getElementById('start-menu');
+
+        function toggleStartMenu() {
+            const isVisible = startMenu.style.display === 'block';
+            startMenu.style.display = isVisible ? 'none' : 'block';
+            if (!isVisible) {
+                // Bring menu to front (just above taskbar)
+                startMenu.style.zIndex = 101; 
+            }
+        }
+
+        function closeStartMenu() {
+            startMenu.style.display = 'none';
+        }
+
+        startButton.addEventListener('click', (e) => {
+            e.stopPropagation(); // Stop click from bubbling to document
+            toggleStartMenu();
+        });
+
+        // Close start menu if clicking outside
+        document.addEventListener('click', (e) => {
+            if (startMenu.style.display === 'block') {
+                if (!startButton.contains(e.target) && !startMenu.contains(e.target)) {
+                    closeStartMenu();
+                }
+            }
+        });
+
+        // --- Clock Logic ---
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = now.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+
+            hours = hours % 12;
+            hours = hours ? hours : 12; // Hour '0' should be '12'
+            
+            const minutesStr = minutes < 10 ? '0' + minutes : minutes;
+
+            const timeString = `${hours}:${minutesStr} ${ampm}`;
+            document.getElementById('clock').textContent = timeString;
+        }
+
+        // --- Blog Loading Logic ---
+        async function loadBlogPosts() {
+            const contentArea = document.getElementById('blog-content-area');
+            
+            try {
+                const response = await fetch('blog.json');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const posts = await response.json();
+
+                let postsHtml = '';
+                posts.forEach(post => {
+                    postsHtml += `
+                        <article>
+                            <h2>${post.title}</h2>
+                            <p><strong>Date:</strong> ${post.date}</p>
+                            ${post.content.join('')}
+                        </article>
+                        <hr style="margin: 20px 0;" />
+                    `;
+                });
+
+                // Append the generated HTML to the existing content
+                contentArea.innerHTML += postsHtml;
+
+                // Add footer
+                contentArea.innerHTML += `
+                    <div class="sunken-panel" style="margin-top: 20px; padding: 5px;">
+                        <p style="text-align: center; margin: 0;">(C) 2025 Kunal. All rights reserved... probably.</p>
+                    </div>
+                `;
+
+            } catch (error) {
+                console.error('Failed to load blog posts:', error);
+                contentArea.innerHTML += '<p>Error loading blog posts. Please check the console.</p>';
+            }
+        }
+
+
+        // --- Page Load ---
+        window.onload = () => {
+            playStartupSound();
+            updateClock();
+            setInterval(updateClock, 1000);
+            loadBlogPosts(); // <-- Load blog posts when the page loads
+        };
+
+    </script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
     <title>Kunal's Portfolio</title>
     
     <!-- Import the 98.css stylesheet -->
@@ -104,6 +104,7 @@
             z-index: 5;
         }
 
+        /* Changed blog window back to original size */
         #blog-window {
             top: 60px;
             left: 150px;
@@ -158,6 +159,15 @@
             height: calc(100% - 24px); /* Full height minus title bar */
             padding: 0;
             margin: 0;
+            background-color: white;
+        }
+        
+        /* Reverted blog window body style */
+        #blog-window .window-body {
+            background: white; 
+            color: black; 
+            font-family: 'Times New Roman', serif; 
+            font-size: 16px;
         }
 
         #pdf-viewer {
@@ -275,10 +285,10 @@
         }
     </style>
 </head>
-<body <!-- onmousedown="playClickSound()" removed --> >
+<body>
 
     <!-- 1. Desktop Icons -->
-    <div class="desktop-icon" id="kunal-icon" <!-- onmousedown="playClickSound()" removed --> onclick="showWindow('kunal-window', 'Kunal')">
+    <div class="desktop-icon" id="kunal-icon" onclick="showWindow('kunal-window', 'Kunal')">
         <!-- Simple SVG for a folder -->
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="50" height="50">
             <path d="M10 20 H40 L50 30 H90 V80 H10 V20" fill="#FFD700" stroke="#8B4513" stroke-width="2"/>
@@ -287,7 +297,8 @@
         <p>Kunal</p>
     </div>
 
-    <div class="desktop-icon" id="ie-icon" <!-- onmousedown="playClickSound()" removed --> onclick="showWindow('blog-window', 'Kunal\'s Blog')">
+    <!-- UPDATED: onclick to call showWindow for the blog -->
+    <div class="desktop-icon" id="ie-icon" onclick="showWindow('blog-window', 'Kunal\'s Blog')">
         <!-- SVG for Internet Explorer logo -->
         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 100 100">
             <path d="M50 0C22.386 0 0 22.386 0 50s22.386 50 50 50 50-22.386 50-50S77.614 0 50 0zm0 8c23.196 0 42 18.804 42 42s-18.804 42-42 42S8 73.196 8 50 26.804 8 50 8zm-6.24 10.375c-16.14 0-26.12 11.23-26.12 25.438 0 5.11.89 10.22 2.67 14.532 1.45 3.49 3.52 6.5 6.13 8.91 3.23 2.98 7.23 4.96 11.75 5.76 4.3.76 9.1-.02 12.82-1.87 2.6-1.3 4.9-3.2 6.7-5.5.9-.9 1.7-1.9 2.4-3 .5-.6.9-1.3 1.3-2 .5-.7.8-1.5 1.1-2.3.2-.6.4-1.2.5-1.9.1-.3.2-.6.3-.9.1-.4.1-.7.2-1.1v-.1c.03-.1.06-.2.09-.3.04-.1.07-.3.1-.4.01-.06.02-.1.03-.1.06-.2.1-.4.16-.6.03-.1.05-.2.08-.3.01-.03.02-.06.03-.1.06-.2.1-.4.16-.6.03-.1.05-.2.08-.3.01-.03.02-.06.03-.1.04-.2.08-.3.12-.5.01-.03.02-.06.03-.1.04-.2.08-.3.12-.5.01-.03.02-.06.03-.1.02-.1.04-.2.06-.3.01-.03.02-.06.03-.1.02-.1.04-.2.06-.3.01-.03.02-.06.03-.1.01-.03.02-.06.03-.1.02-.1.04-.2.06-.3l.03-.1c.02-.1.04-.2.06-.3h.03c.02-.1.04-.2.06-.3h.03c.02-.1.04-.2.06-.3h.03c.02-.1.04-.2.06-.3h.03c.02-.1.03-.2.05-.3h.03c.02-.1.03-.2.05-.3h.03c.02-.1.03-.2.05-.3h.03c.02-.1.03-.2.05-.3h.03c.01-.1.03-.2.04-.3h.03c.01-.1.03-.2.04-.3h.03c.01-.1.03-.2.04-.3h.03c.01-.1.02-.2.04-.3h.03c.01-.1.02-.2.04-.3h.03c.01-.1.02-.2.04-.3h.03c.f 0" fill="#1E90FF"/>
@@ -298,7 +309,7 @@
         <p>Internet</p>
     </div>
 
-    <div class="desktop-icon" id="recycle-bin-icon" <!-- onmousedown="playClickSound()" removed --> onclick="showWindow('recycle-bin-window', 'Recycle Bin')">
+    <div class="desktop-icon" id="recycle-bin-icon" onclick="showWindow('recycle-bin-window', 'Recycle Bin')">
         <!-- SVG for Recycle Bin (empty) -->
         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 64 64">
             <path fill="#C0C0C0" stroke="#222" stroke-width="2" d="M18 16 L46 16 L46 54 L18 54 Z"/>
@@ -313,14 +324,14 @@
         <div class="title-bar">
             <div class="title-bar-text">Kunal</div>
             <div class="title-bar-controls">
-                <button aria-label="Minimize" <!-- onmousedown="playClickSound()" removed --> onclick="minimizeWindow('kunal-window')"></button>
-                <button aria-label="Maximize" <!-- onmousedown="playClickSound()" removed --> onclick="toggleMaximize('kunal-window')"></button>
-                <button aria-label="Close" <!-- onmousedown="playClickSound()" removed --> onclick="hideWindow('kunal-window')"></button>
+                <button aria-label="Minimize" onclick="minimizeWindow('kunal-window')"></button>
+                <button aria-label="Maximize" onclick="toggleMaximize('kunal-window')"></button>
+                <button aria-label="Close" onclick="hideWindow('kunal-window')"></button>
             </div>
         </div>
         <div class="window-body">
             <p>Welcome to my folder. Click the file below to see my resume.</p>
-            <div class="file-icon" <!-- onmousedown="playClickSound()" removed --> onclick="showResume()">
+            <div class="file-icon" onclick="showResume()">
                 <!-- Simple SVG for a file -->
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32">
                     <path d="M20 10 H80 V90 H20 V10 Z" fill="white" stroke="black" stroke-width="2"/>
@@ -357,9 +368,9 @@
         <div class="title-bar">
             <div class="title-bar-text">resume.pdf - PDF Viewer</div>
             <div class="title-bar-controls">
-                <button aria-label="Minimize" <!-- onmousedown="playClickSound()" removed --> onclick="minimizeWindow('resume-window')"></button>
-                <button aria-label="Maximize" <!-- onmousedown="playClickSound()" removed --> onclick="toggleMaximize('resume-window')"></button>
-                <button aria-label="Close" <!-- onmousedown="playClickSound()" removed --> onclick="hideWindow('resume-window'); clearPdf()"> </button>
+                <button aria-label="Minimize" onclick="minimizeWindow('resume-window')"></button>
+                <button aria-label="Maximize" onclick="toggleMaximize('resume-window')"></button>
+                <button aria-label="Close" onclick="hideWindow('resume-window'); clearPdf()"> </button>
             </div>
         </div>
         <div class="window-body">
@@ -369,23 +380,24 @@
     </div>
 
     <!-- 5. New Blog/IE Window (Hidden) -->
+    <!-- UPDATED: Reverted to local blog -->
     <div class="window" id="blog-window">
         <div class="title-bar">
             <div class="title-bar-text">Kunal's Blog - Internet Explorer</div>
             <div class="title-bar-controls">
-                <button aria-label="Minimize" <!-- onmousedown="playClickSound()" removed --> onclick="minimizeWindow('blog-window')"></button>
-                <button aria-label="Maximize" <!-- onmousedown="playClickSound()" removed --> onclick="toggleMaximize('blog-window')"></button>
-                <button aria-label="Close" <!-- onmousedown="playClickSound()" removed --> onclick="hideWindow('blog-window')"></button>
+                <button aria-label="Minimize" onclick="minimizeWindow('blog-window')"></button>
+                <button aria-label="Maximize" onclick="toggleMaximize('blog-window')"></button>
+                <button aria-label="Close" onclick="hideWindow('blog-window')"> </button>
             </div>
         </div>
-        <div class="window-body" style="background: white; color: black; font-family: 'Times New Roman', serif; font-size: 16px;">
+        <div class="window-body">
             <!-- A more 'document' like style inside -->
             <div id="blog-content-area" style="padding: 10px; height: 100%; overflow-y: auto;">
                 <!-- Blog posts will be loaded here by JavaScript -->
                 <h1>Welcome to my Dev Blog!</h1>
                 <p>This is where I'll document my journey, share projects, and post tutorials. It's all part of the portfolio!</p>
                 
-                <!-- The content from blog.json will be injected below this line -->
+                <!-- The content from the JS array will be injected below this line -->
 
             </div>
         </div>
@@ -399,9 +411,9 @@
         <div class="title-bar">
             <div class="title-bar-text">Recycle Bin</div>
             <div class="title-bar-controls">
-                <button aria-label="Minimize" <!-- onmousedown="playClickSound()" removed --> onclick="minimizeWindow('recycle-bin-window')"></button>
-                <button aria-label="Maximize" <!-- onmousedown="playClickSound()" removed --> onclick="toggleMaximize('recycle-bin-window')"></button>
-                <button aria-label="Close" <!-- onmousedown="playClickSound()" removed --> onclick="hideWindow('recycle-bin-window')"></button>
+                <button aria-label="Minimize" onclick="minimizeWindow('recycle-bin-window')"></button>
+                <button aria-label="Maximize" onclick="toggleMaximize('recycle-bin-window')"></button>
+                <button aria-label="Close" onclick="hideWindow('recycle-bin-window')"></button>
             </div>
         </div>
         <div class="window-body">
@@ -414,13 +426,13 @@
 
     <!-- 7. New Taskbar -->
     <div class="taskbar">
-        <button class="start-button" id="start-button" <!-- onmousedown="playClickSound()" removed --> >
+        <button class="start-button" id="start-button" >
             <!-- Win98 Logo SVG -->
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 100 100">
                 <rect width="45" height="45" x="5" y="5" fill="#F00"/>
                 <rect width="45" height="45" x="50" y="5" fill="#0F0"/>
                 <rect width="45" height="45" x="5" y="50" fill="#00F"/>
-                <rect width="4G" height="45" x="50" y="50" fill="#FF0"/>
+                <rect width="45" height="45" x="50" y="50" fill="#FF0"/>
                 <path d="M 30 30 L 70 30 L 70 70 L 30 70 Z" fill="#C0C0C0"/>
                 <path d="M 35 35 L 65 35 L 65 65 L 35 65 Z" fill="#FFF"/>
                 <path d="M 50 38 L 62 62 L 38 62 Z" fill="#000"/>
@@ -443,7 +455,7 @@
     <!-- 8. New Start Menu (Hidden) -->
     <div id="start-menu" class="sunken-panel">
         <ul class="menu-items">
-            <li <!-- onmousedown="playClickSound()" removed --> onclick="showWindow('kunal-window', 'Kunal'); closeStartMenu();">
+            <li onclick="showWindow('kunal-window', 'Kunal'); closeStartMenu();">
                 <!-- Inline SVG for folder -->
                 <svg viewBox="0 0 100 100" width="20" height="20" style="margin-right: 5px;">
                     <path d="M10 20 H40 L50 30 H90 V80 H10 V20" fill="#FFD700" stroke="#8B4513" stroke-width="3"/>
@@ -451,7 +463,8 @@
                 </svg>
                 Kunal
             </li>
-            <li <!-- onmousedown="playClickSound()" removed --> onclick="showWindow('blog-window', 'Kunal\'s Blog'); closeStartMenu();">
+            <!-- UPDATED: onclick to call showWindow for the blog -->
+            <li onclick="showWindow('blog-window', 'Kunal\'s Blog'); closeStartMenu();">
                 <!-- Inline SVG for IE -->
                 <svg viewBox="0 0 100 100" width="20" height="20" style="margin-right: 5px;">
                      <path d="M50 0C22.386 0 0 22.386 0 50s22.386 50 50 50 50-22.386 50-50S77.614 0 50 0zm0 8c23.196 0 42 18.804 42 42s-18.804 42-42 42S8 73.196 8 50 26.804 8 50 8z" fill="#1E90FF"/>
@@ -462,9 +475,6 @@
             </li>
         </ul>
     </div>
-
-    <!-- 9. Audio Elements -->
-    <!-- Audio elements removed -->
 
 
     <script>
@@ -484,6 +494,7 @@
             'blog-window': { 
                 minimized: false, 
                 maximized: false, 
+                // Reverted lastPos to match original CSS
                 lastPos: { top: '60px', left: '150px', width: '500px', height: '400px' } 
             },
             'recycle-bin-window': {
@@ -492,9 +503,6 @@
                 lastPos: { top: '100px', left: '100px', width: '300px', height: 'auto' } 
             }
         };
-
-        // --- Sound Functions ---
-        // Sound functions removed
 
         // --- Window Management ---
 
@@ -505,10 +513,10 @@
             // Restore from minimized if it was
             if (windowStates[id].minimized) {
                 el.style.display = 'block';
-                windowStates[id].minimized = false;
             } else {
                 el.style.display = 'block';
             }
+            windowStates[id].minimized = false;
             
             bringToFront(el);
             createTaskbarTab(id, title);
@@ -520,8 +528,15 @@
             if (el) {
                 el.style.display = 'none';
                 windowStates[id].minimized = false; // Reset state on close
-                windowStates[id].maximized = false;
-                el.classList.remove('maximized');
+                if (windowStates[id].maximized) {
+                     el.classList.remove('maximized');
+                     windowStates[id].maximized = false;
+                     // Reset size for next time
+                     el.style.top = windowStates[id].lastPos.top;
+                     el.style.left = windowStates[id].lastPos.left;
+                     el.style.width = windowStates[id].lastPos.width;
+                     el.style.height = windowStates[id].lastPos.height;
+                }
                 removeTaskbarTab(id);
             }
         }
@@ -565,12 +580,10 @@
                 // Maximize
                 // Store current pos before maximizing
                 const rect = el.getBoundingClientRect();
-                state.lastPos = {
-                    top: el.style.top,
-                    left: el.style.left,
-                    width: rect.width + 'px',
-                    height: rect.height + 'px'
-                };
+                if (el.style.top) state.lastPos.top = el.style.top;
+                if (el.style.left) state.lastPos.left = el.style.left;
+                state.lastPos.width = rect.width + 'px';
+                state.lastPos.height = rect.height + 'px';
 
                 el.classList.add('maximized');
                 // Clear inline styles so CSS class takes over
@@ -590,23 +603,16 @@
             document.getElementById('pdf-viewer').src = 'about:blank';
         }
 
+        // --- NEW: Blog Functions ---
+        // REMOVED showBlog() and clearBlog()
+
         // --- Resume Loading Logic ---
 
         function showResume() {
-            // *** IMPORTANT: Replace this with the public URL to your resume.pdf! ***
-            // For Vercel, upload your PDF to the /public folder
-            // and then the URL will just be '/resume.pdf'.
-            // const resumePdfUrl = '/resume.pdf'; 
-            
-            // If you're testing locally, you can use a sample PDF:
-            // const resumePdfUrl = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
-
-            // FOR LOCAL TESTING (Option 1):
-            // const resumePdfUrl = 'public/resume.pdf'; 
-            
-            // FOR VERCEL (and local server testing):
-            const resumePdfUrl = '/resume.pdf';
-
+            // This path looks for 'resume.pdf' at the root of your site.
+            // This is correct for Netlify/Vercel if you upload the file
+            // to the top level (or in Vercel's 'public' folder).
+            const resumePdfUrl = '/resume.pdf'; 
 
             hideWindow('kunal-window');
             showWindow('loader-window');
@@ -653,8 +659,6 @@
             const titleBar = e.target.closest('.title-bar');
             if (!titleBar) return;
             
-            // Play sound on title bar click - removed
-
             activeWindow = titleBar.closest('.window');
             if (!activeWindow) return;
 
@@ -724,7 +728,6 @@
             tab.className = 'taskbar-tab';
             tab.id = tabId;
             tab.textContent = title;
-            // tab.onmousedown = playClickSound; // Add sound - removed
             tab.onclick = () => onTaskbarTabClick(id);
             
             container.appendChild(tab);
@@ -821,14 +824,14 @@
             document.getElementById('clock').textContent = timeString;
         }
 
-        // --- Blog Loading Logic ---
+        // --- Blog Loading Logic (Re-added) ---
         
-        // 1. Define blog posts here instead of a separate file
-        // This avoids all fetch() errors in previews and local files.
+        // 1. Define blog posts here.
+        // This is where you edit your blog!
         const blogPosts = [
             {
                 "title": "My First Post: Building This Portfolio",
-                "date": "November 14, 2025",
+                "date": "November 16, 2025",
                 "content": [
                     "<p>If you're reading this, you're inside the very thing I'm writing about. This portfolio was a super fun project. I wanted to learn how to make something that felt interactive, not just a static page.</p>",
                     "<p>Using 98.css was a blast. It handles all the core styling of the windows, buttons, and that classic grey. The draggable windows were a fun JavaScript challenge!</p>"
@@ -836,7 +839,7 @@
             },
             {
                 "title": "My Second Post: What I'm Learning Next",
-                "date": "November 15, 2025",
+                "date": "November 17, 2025",
                 "content": [
                     "<p>Now that the portfolio is 'working', I'm thinking about what to add next. Maybe a simple 'Notepad' app? Or making the Start Menu have more sub-folders?</p>",
                     "<p>I'm also diving into backend development, so maybe I'll find a way to connect this to a real database... though that might ruin the retro 'static file' vibe!</p>"
@@ -844,13 +847,12 @@
             }
         ];
 
-        // 2. Update the function to read from the variable above
+        // 2. This function builds the blog from the array above
         function loadBlogPosts() {
             const contentArea = document.getElementById('blog-content-area');
             
             try {
                 let postsHtml = '';
-                // 3. Loop through the new 'blogPosts' variable
                 blogPosts.forEach(post => {
                     postsHtml += `
                         <article>
@@ -863,17 +865,17 @@
                 });
 
                 // Append the generated HTML to the existing content
+                // (We use += to keep the H1 and P tag that are already in the HTML)
                 contentArea.innerHTML += postsHtml;
 
                 // Add footer
                 contentArea.innerHTML += `
                     <div class="sunken-panel" style="margin-top: 20px; padding: 5px;">
-                        <p style="text-align: center; margin: 0;">(C) 2025 Kunal. All rights reserved... probably.</p>
+                        <p style="text-align: center; margin: 0;">(C) 2025 Kunal. All rights reserved.</p>
                     </div>
                 `;
 
             } catch (error) {
-                // This 'try' block isn't really needed anymore, but it's good practice
                 console.error('Failed to build blog posts:', error);
                 contentArea.innerHTML += '<p>Error building blog posts.</p>';
             }
@@ -882,7 +884,6 @@
 
         // --- Page Load ---
         window.onload = () => {
-            // playStartupSound(); - removed
             updateClock();
             setInterval(updateClock, 1000);
             loadBlogPosts(); // <-- Load blog posts when the page loads

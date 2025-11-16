@@ -108,7 +108,6 @@
             font-size: 16px;
             overflow-y: auto;
             padding: 10px;
-            /* **FIX:** Removed the bad height property here */
         }
         /* Styles for inside the resume window */
         #resume-content {
@@ -203,7 +202,6 @@
             color: black; 
             font-family: 'Times New Roman', serif; 
             font-size: 16px;
-            /* **FIX:** Removed the bad height property here */
         }
 
         /* Simple progress bar animation */
@@ -394,7 +392,48 @@
             </div>
         </div>
         <div class="window-body">
-            <div id="resume-content"></div>
+            <div id="resume-content">
+                <h1>Kunal [Your Last Name]</h1>
+                <p class="contact-info">your.email@example.com | (555) 123-4567 | Your City, ST</p>
+                
+                <h2>Summary</h2>
+                <p>Creative and driven developer and B.Tech EEE student with a passion for robotics, AI, and modern web technology. Seeking to leverage skills in JavaScript, Python, and electrical engineering to build engaging user experiences and innovative autonomous systems.</p>
+                
+                <h2>Skills</h2>
+                <ul class="skills-list">
+                    <li>- JavaScript (ES6+)</li>
+                    <li>- HTML5 & CSS3</li>
+                    <li>- React & Next.js</li>
+                    <li>- Python (OpenCV, TensorFlow)</li>
+                    <li>- ROS 2</li>
+                    <li>- C++</li>
+                    <li>- Git & GitHub</li>
+                    <li>- UI/UX Design Principles</li>
+                </ul>
+
+                <h2>Experience</h2>
+                
+                <h3>Personal Project</h3>
+                <p class="job-title">Autonomous Rover Project | 2025 - Present</p>
+                <ul>
+                    <li>Designing and building a Level 4/5 autonomous vehicle using ROS 2.</li>
+                    <li>Integrating computer vision models for object detection and pathfinding.</li>
+                    <li>Developing software stack on both laptop and embedded hardware (Radxa).</li>
+                </ul>
+
+                <h3>Self-Employed</h3>
+                <p class="job-title">Freelance Web Developer | 2024 - Present</p>
+                <ul>
+                    <li>Designed and developed this interactive retro-style portfolio.</li>
+                    <li>Built responsive websites for local businesses.</li>
+                    <li>Collaborated with clients to turn requirements into functional applications.</li>
+                </ul>
+
+                <h2>Education</h2>
+                <h3>Your University Name</h3>
+                <p>B.Tech in Electrical and Electronics Engineering | 2024 - 2028 (Expected)</p>
+                
+                </div>
         </div>
     </div>
 
@@ -598,11 +637,12 @@
             bringToFront(el);
         }
         
-        // REMOVED clearPdf()
-
         // --- Resume Loading Logic (UPDATED) ---
 
         function showResume() {
+            // This function now just shows/hides the windows.
+            // The content is already in the HTML.
+            
             hideWindow('kunal-window');
             showWindow('loader-window', 'Loading'); // Show loader first
 
@@ -621,7 +661,7 @@
                     clearInterval(interval);
                     setTimeout(() => {
                         hideWindow('loader-window');
-                        // NOW, show the new resume-data-window
+                        // NOW, show the resume-data-window
                         showWindow('resume-data-window', 'Resume.txt'); 
                         progressBar.style.width = '0%'; // Reset for next time
                     }, 300); // Short delay after loading
@@ -854,107 +894,12 @@
             }
         }
 
-
-        // --- NEW: Resume Data ---
-
-        // 1. Define your resume data here.
-        // This is now where you edit your resume!
-        const resumeData = {
-            "name": "Kunal [Your Last Name]",
-            "contact": "your.email@example.com | (555) 123-4567 | Your City, ST",
-            "summary": "Creative and driven developer and B.Tech EEE student with a passion for robotics, AI, and modern web technology. Seeking to leverage skills in JavaScript, Python, and electrical engineering to build engaging user experiences and innovative autonomous systems.",
-            "skills": [
-                "JavaScript (ES6+)",
-                "HTML5 & CSS3",
-                "React & Next.js",
-                "Python (OpenCV, TensorFlow)",
-                "ROS 2",
-                "C++",
-                "Git & GitHub",
-                "UI/UX Design Principles"
-            ],
-            "experience": [
-                {
-                    "title": "Autonomous Rover Project",
-                    "company": "Personal Project",
-                    "dates": "2025 - Present",
-                    "duties": [
-                        "Designing and building a Level 4/5 autonomous vehicle using ROS 2.",
-                        "Integrating computer vision models for object detection and pathfinding.",
-                        "Developing software stack on both laptop and embedded hardware (Radxa)."
-                    ]
-                },
-                {
-                    "title": "Freelance Web Developer",
-                    "company": "Self-Employed",
-                    "dates": "2024 - Present",
-                    "duties": [
-                        "Designed and developed a retro-style interactive portfolio (this one!).",
-                        "Built responsive websites for local businesses using modern frameworks.",
-                        "Collaborated with clients to turn requirements into functional applications."
-                    ]
-                }
-            ],
-            "education": {
-                "degree": "B.Tech in Electrical and Electronics Engineering",
-                "school": "Your University Name",
-                "dates": "2024 - 2028 (Expected)"
-            }
-        };
-
-        // 2. This function builds the resume
-        function loadResume() {
-            const contentArea = document.getElementById('resume-content');
-            try {
-                let html = '';
-                
-                // Name and Contact
-                html += `<h1>${resumeData.name}</h1>`;
-                html += `<p class="contact-info">${resumeData.contact}</p>`;
-                
-                // Summary
-                html += `<h2>Summary</h2>`;
-                html += `<p>${resumeData.summary}</p>`;
-                
-                // Skills
-                html += `<h2>Skills</h2>`;
-                html += `<ul class="skills-list">`;
-                resumeData.skills.forEach(skill => {
-                    html += `<li>- ${skill}</li>`;
-                });
-                html += `</ul>`;
-
-                // Experience
-                html += `<h2>Experience</h2>`;
-                resumeData.experience.forEach(job => {
-                    html += `<h3>${job.company}</h3>`;
-                    html += `<p class="job-title">${job.title} | ${job.dates}</p>`;
-                    html += `<ul>`;
-                    job.duties.forEach(duty => {
-                        html += `<li>${duty}</li>`;
-                    });
-                    html += `</ul>`;
-                });
-
-                // Education
-                html += `<h2>Education</h2>`;
-                html += `<h3>${resumeData.school}</h3>`;
-                html += `<p>${resumeData.degree} | ${resumeData.education.dates}</p>`;
-
-                contentArea.innerHTML = html;
-            } catch (error) {
-                console.error('Failed to build resume:', error);
-                contentArea.innerHTML = '<p>Error building resume.</p>';
-            }
-        }
-
-
         // --- Page Load ---
         window.onload = () => {
             updateClock();
             setInterval(updateClock, 1000);
             loadBlogPosts(); // Load the blog
-            loadResume();   // Load the resume (builds it in the hidden window)
+            // No need to call loadResume() anymore!
         };
 
     </script>
